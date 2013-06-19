@@ -25,6 +25,7 @@
 # v0.2 - checks logical volume status & wipes log
 # v0.3 - strips trailing "," & tells you the logical volume with
 #        the failure
+# v0.4 - fixed deprecated os.open4 - https://github.com/elfranne/nagios-plugins/
 
 
 import sys, os, re, string
@@ -44,8 +45,11 @@ lnum = ""
 check_status = 0
 result = ""
 
-for line in os.popen4("/usr/bin/sudo /usr/StorMan/arcconf GETCONFIG 1 LD")[1].readlines():
-  # Match the regexs
+
+p=subprocess.Popen("/usr/bin/sudo /usr/StorMan/arcconf GETCONFIG 1 LD",shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+(s_in, s_out) = (p.stdin, p.stdout)
+for line in s_out:
+# Match the regexs
 	ldevice = l_device_re.match(line)
 	if ldevice:
 		lnum = ldevice.group(1)
@@ -57,7 +61,10 @@ for line in os.popen4("/usr/bin/sudo /usr/StorMan/arcconf GETCONFIG 1 LD")[1].re
 			check_status = 2
 		result += "Logical Device " + lnum + " " + lstatus.group(1) + ","
 
-for line in os.popen4("/usr/bin/sudo /usr/StorMan/arcconf GETCONFIG 1 AD")[1].readlines():
+
+p=subprocess.Popen("/usr/bin/sudo /usr/StorMan/arcconf GETCONFIG 1 AD",shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+(s_in, s_out) = (p.stdin, p.stdout)
+for line in s_out:
 	# Match the regexs
 	cstatus = c_status_re.match(line)
 	if cstatus:
