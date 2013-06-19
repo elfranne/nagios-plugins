@@ -28,7 +28,7 @@
 # v0.4 - fixed deprecated os.open4 - https://github.com/elfranne/nagios-plugins/
 
 
-import sys, os, re, string
+import sys, subprocess, re, string
 
 c_status_re = re.compile('^\s*Controller Status\s*:\s*(.*)$')
 l_status_re = re.compile('^\s*Status of logical device\s*:\s*(.*)$')
