@@ -8,10 +8,10 @@
 #
 # check-aacraid.py
 #
-# Grabs the output from "/usr/StorMan/arcconf GETCONFIG 1 LD" then
+# Grabs the output from "/usr/sbin/arcconf GETCONFIG 1 LD" then
 # determines the health of the Logical Devices.
 #
-# Grabs the output from "/usr/StorMan/arcconf GETCONFIG 1 AL" then
+# Grabs the output from "/usr/sbin/arcconf GETCONFIG 1 AL" then
 # determines the health of various status indicators from the card
 # and drives.
 #
@@ -19,13 +19,16 @@
 # the current working directory.
 # 
 # Add this to your "/etc/sudoers" file:
-# "nagios ALL=(root) NOPASSWD: /usr/StorMan/arcconf GETCONFIG 1 *"
+# "nagios ALL=(root) NOPASSWD: /usr/sbin/arcconf GETCONFIG 1 *"
 #
 # v0.1 - only checks card information so far, not drives yet
 # v0.2 - checks logical volume status & wipes log
 # v0.3 - strips trailing "," & tells you the logical volume with
 #        the failure
 # v0.4 - fixed deprecated os.open4 - https://github.com/elfranne/nagios-plugins/
+# v0.5 - will use debian packages from: http://hwraid.le-vert.net/wiki/DebianPackages
+
+
 
 
 import sys, subprocess, re, string
@@ -46,7 +49,7 @@ check_status = 0
 result = ""
 
 
-p=subprocess.Popen("/usr/bin/sudo /usr/StorMan/arcconf GETCONFIG 1 LD",shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+p=subprocess.Popen("/usr/bin/sudo /usr/sbin/arcconf GETCONFIG 1 LD",shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
 (s_in, s_out) = (p.stdin, p.stdout)
 for line in s_out:
 # Match the regexs
@@ -62,7 +65,7 @@ for line in s_out:
 		result += "Logical Device " + lnum + " " + lstatus.group(1) + ","
 
 
-p=subprocess.Popen("/usr/bin/sudo /usr/StorMan/arcconf GETCONFIG 1 AD",shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+p=subprocess.Popen("/usr/bin/sudo /usr/sbin/arcconf GETCONFIG 1 AD",shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
 (s_in, s_out) = (p.stdin, p.stdout)
 for line in s_out:
 	# Match the regexs
