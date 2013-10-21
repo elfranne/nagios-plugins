@@ -35,7 +35,7 @@ import sys, subprocess, re, string
 
 c_status_re = re.compile('^\s*Controller Status\s*:\s*(.*)$')
 l_status_re = re.compile('^\s*Status of logical device\s*:\s*(.*)$')
-l_device_re = re.compile('^Logical device number 0.*$')
+l_device_re = re.compile('^Logical device number (0).*$')
 #l_device_re = re.compile('^Logical device number ([0-9]+).*$')
 c_defunct_re = re.compile('^\s*Defunct disk drive count\s:\s*([0-9]+).*$')
 c_degraded_re = re.compile('^\s*Logical devices/Failed/Degraded\s*:\s*([0-9]+)/([0-9]+)/([0-9]+).*$')
