@@ -50,6 +50,29 @@
 # Adapted to fit my setup and Debian 8.
 # https://github.com/elfranne/nagios-plugins
 
+#Installation:
+# check_freeswitch_health.pl must be installed in the Nagios plugins directory on the host system (not the Nagios server). It is called via NRPE.
+#
+# Sample nrpe.cfg command line:
+# 	command[check_freeswitch_health]=/usr/lib/nagios/plugins/check_freeswitch_health.pl $ARG1$
+#
+# and on the Nagios server, corresponding commands and services may be:
+#
+#	define command {
+#	    command_name    check_freeswitch_health
+#	    command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_freeswitch_health $ARG1$
+#  	}
+#
+#	define service {
+#   	host_name       freeswitch01
+#   	service_description     FreeSWITCH - Calls Count
+#   	check_command   check_freeswitch_health!-a '-q show-calls-count'!!!!!!!
+#	}
+
+
+
+
+
 
 # I. Prologue
 use strict;
